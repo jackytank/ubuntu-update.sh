@@ -5,11 +5,13 @@
 # Follow or contribute on GitHub here:
 # https://github.com/TedLeRoy/ubuntu-update.sh
 
-# Defining Colors for text output
-red=$( tput setaf 1 );
-yellow=$( tput setaf 3 );
-green=$( tput setaf 2 );
-normal=$( tput sgr 0 );
+# Defining Colors for text output if we are in a TTY
+if [[ -t 1 ]]; then
+    red=$( tput setaf 1 );
+    yellow=$( tput setaf 3 );
+    green=$( tput setaf 2 );
+    normal=$( tput sgr 0 );
+fi
 
 # Defining Header
 HEADER="
@@ -79,47 +81,47 @@ echo "${red}$HEADER${normal}"
 
 if [[ ! -n $uOff ]]; then
     echo -e "
-\e[32m#############################
+${green}#############################
 #     Updating Data Base    #
-#############################\e[0m
+#############################${normal}
 "
 apt-get update | tee /tmp/update-output.txt
 fi
 
 if [[ ! -n $gOff ]]; then
     echo -e "
-\e[32m##############################
+${green}##############################
 # Upgrading Operating System #
-##############################\e[0m
+##############################${normal}
 "
 apt-get upgrade -y | tee -a /tmp/update-output.txt
 fi
 
 if [[ ! -n $dOff ]]; then
     echo -e "
-\e[32m#############################
+${green}#############################
 #   Starting Full Upgrade   #
-#############################\e[0m
+#############################${normal}
 "
 apt-get dist-upgrade -y | tee -a /tmp/update-output.txt
 echo -e "
-\e[32m#############################
+${green}#############################
 #   Full Upgrade Complete   #
-#############################\e[0m
+#############################${normal}
 "
 fi
 
 if [[ ! -n $rOff ]]; then
     echo -e "
-\e[32m#############################
+${green}#############################
 #    Starting Apt Clean     #
-#############################\e[0m
+#############################${normal}
 "
 apt-get clean | tee -a /tmp/update-output.txt
 echo -e "
-\e[32m#############################
+${green}#############################
 #     Apt Clean Complete    #
-#############################\e[0m
+#############################${normal}
 "
 fi
 
@@ -132,22 +134,22 @@ then
 # Search for issues user may want to see and display them at end of run.
 
   echo -e "
-\e[32m#####################################################
+${green}#####################################################
 #   Checking for actionable messages from install   #
-#####################################################\e[0m
+#####################################################${normal}
 "
-  egrep -wi --color 'warning|error|critical|reboot|restart|autoclean|autoremove' /tmp/update-output.txt | uniq
+  egrep -wi --color=auto 'warning|error|critical|reboot|restart|autoclean|autoremove' /tmp/update-output.txt | uniq
   echo -e "
-\e[32m#############################
+${green}#############################
 #    Cleaning temp files    #
-#############################\e[0m
+#############################${normal}
 "
 
   rm /tmp/update-output.txt
   echo -e "
-\e[32m#############################
+${green}#############################
 #     Done with upgrade     #
-#############################\e[0m
+#############################${normal}
 "
 
 exit 0
@@ -157,9 +159,9 @@ else
 # Exit with message if update-output.txt file is not there.
 
   echo -e "
-\e[32m#########################################################
+${green}#########################################################
 # No items to check given your chosen options. Exiting. #
-#########################################################\e[0m
+#########################################################${normal}
 "
 
 fi
